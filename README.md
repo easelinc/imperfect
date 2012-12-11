@@ -33,12 +33,15 @@ current configuration.
 
 ```
 Imperfect.configure do |config|
-  config.aws_access_key_id = "your-aws-id"
-  config.aws_secret_access_key = "your-aws-secret"
-  config.pagerduty_api_key = "your-pagerduty-api-key"
+  config.enable_storage :cloudwatch, {
+    :aws_access_key_id => "your-aws-id",
+    :aws_secret_access_key => "your-aws-secret"
+  }
+  config.enable_alerts :pagerduty, {
+    :api_key => "your-pagerduty-api-key"
+  }
 
-  # Minimum time (in seconds) between re-trigger alert (this prevents
-  # overloading your alert provider if every event results in a failure)
+  # Minimum time (in seconds) between re-triggering alerts
   config.minimum_alert_update_interval => 60
 
   # All events that you would alert on must be specified here. Unconfigured
@@ -50,10 +53,25 @@ Imperfect.configure do |config|
 
       # The period of preceding time used to determine the current failure rate,
       # defaults to 300s.
-      :lookback_time_period => 300,
+      :lookback_period => 300,
 
-      # The name of the pagerduty service to mark as failed.
-      :pagerduty_service_name => 'service-event',
+      :alerts => {
+        :pagerduty => {
+          # The name of the pagerduty service to mark as failed.
+          :service_name => 'service-event',
+        }
+      },
+
+      :storage => {
+        :cloudwatch => {
+          # The group which this metric should belong to on cloudwatch.
+          :namespace => 'Imperfect',
+          # The name of the cloudwatch metric to use for success.
+          :success_metric_name => 'event-success',
+          # The name of the cloudwatch metric to use for failure.
+          :failure_metric_name => 'event-failure',
+        }
+      }
     }
   }
 end

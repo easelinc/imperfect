@@ -20,4 +20,9 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency "bundler", "~> 1.2.0"
   gem.add_development_dependency "rspec", "~> 2.12.0"
+  gem.add_development_dependency "guard-rspec", "~> 2.3.1"
+  gem.add_development_dependency "listen", "~> 0.6.0"
+  gem.add_development_dependency "rb-fsevent", "~> 0.9.1"
+  gem.add_development_dependency "vcr", "~> 2.3.0"
+  gem.add_development_dependency "webmock", "~> 1.9.0"
 end

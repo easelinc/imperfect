@@ -1,39 +1,64 @@
 require 'imperfect/version'
+require 'imperfect/storage'
+require 'imperfect/alerts'
 
 class Imperfect
+  class << self
+    attr_accessor :configuration
+  end
+
   # Public: Allows the configuration of Imperfect using the given block.
   #
   # Example:
   #
   #  Imperfect.configure do |config|
-  #    config.aws_access_key_id = "your-aws-id"
-  #    config.aws_secret_access_key = "your-aws-secret"
-  #    config.pagerduty_api_key = "your-pagerduty-api-key"
-
-  #    # Minimum time (in seconds) between re-trigger alert (this prevents
-  #    # overloading your alert provider if every event results in a failure)
+  #    config.enable_storage :cloudwatch, {
+  #      :aws_access_key_id => "your-aws-id",
+  #      :aws_secret_access_key => "your-aws-secret"
+  #    }
+  #    config.enable_alerts :pagerduty, {
+  #      :api_key => "your-pagerduty-api-key"
+  #    }
+  #
+  #    # Minimum time (in seconds) between re-triggering alerts
   #    config.minimum_alert_update_interval => 60
-
+  #
   #    # All events that you would alert on must be specified here. Unconfigured
   #    # events will be silently ignored.
   #    config.events = {
   #      'event' => {
   #        # Alert if the failure rate exceeds this value.
   #        :acceptable_failure_rate => 0.10,
-
+  #
   #        # The period of preceding time used to determine the current failure rate,
   #        # defaults to 300s.
-  #        :lookback_time_period => 300,
-
-  #        # The name of the pagerduty service to mark as failed.
-  #        :pagerduty_service_name => 'service-event',
+  #        :lookback_period => 300,
+  #
+  #        :alerts => {
+  #          :pagerduty => {
+  #            # The name of the pagerduty service to mark as failed.
+  #            :service_name => 'service-event',
+  #          }
+  #        },
+  #
+  #        :storage => {
+  #          :cloudwatch => {
+  #            # The group which this metric should belong to on cloudwatch.
+  #            :namespace => 'Imperfect',
+  #            # The name of the cloudwatch metric to use for success.
+  #            :success_metric_name => 'event-success',
+  #            # The name of the cloudwatch metric to use for failure.
+  #            :failure_metric_name => 'event-failure',
+  #          }
+  #        }
   #      }
   #    }
   #  end
   #
   # Returns nothing.
   def self.configure
-    yield self
+    self.configuration ||= Configuration.new
+    yield(configuration)
   end
 
   # Public: Track a successful completion of the given event.
@@ -57,5 +82,33 @@ class Imperfect
   #
   # Returns nothing.
   def self.trigger_alert!(event)
+  end
+
+  class Configuration
+    attr_accessor :minimum_alert_update_interval, :events
+    attr_reader :storage, :alerts
+
+    def initialize
+      @minimum_alert_update_interval = 60
+      @events = {}
+    end
+
+    def enable_storage(type, configuration)
+      @storage = case type
+      when :cloudwatch
+        Imperfect::Storage::Cloudwatch.new(configuration)
+      else
+        raise "Invalid storage type: #{type}"
+      end
+    end
+
+    def enable_alerts(type, configuration)
+      @alerts = case type
+      when :pagerduty
+        Imperfect::Alerts::Pagerduty.new(configuration)
+      else
+        raise "Invalid alert type: #{type}"
+      end
+    end
   end
 end
