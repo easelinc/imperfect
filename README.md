@@ -32,6 +32,8 @@ current configuration (NOTE: this is to be implemented).
 
 ```
 Imperfect.configure do |config|
+  config.enabled = Rails.env.production?
+
   config.enable_storage :cloudwatch, {
     :access_key_id => "your-aws-id",
     :secret_access_key => "your-aws-secret"

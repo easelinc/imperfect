@@ -10,6 +10,17 @@ describe 'Imperfect' do
   end
 
   describe 'configuring' do
+    context 'global enabled' do
+      before do
+        subject.configure do |config|
+          config.enabled = true
+        end
+      end
+      it 'exists' do
+        subject.configuration.enabled.should be_true
+      end
+    end
+
     context 'storage with cloudwatch' do
       before do
         subject.configure do |config|
@@ -82,17 +93,39 @@ describe 'Imperfect' do
       end
     end
 
-    describe 'success' do
-      it 'stores a datapoint' do
-        subject.configuration.storage.should_receive(:increment).with(event_configuration[:storage], 'event', :success)
-        subject.success('event')
+    context 'when enabled' do
+      describe 'success' do
+        it 'stores a datapoint' do
+          subject.configuration.storage.should_receive(:increment).with(event_configuration[:storage], 'event', :success)
+          subject.success('event')
+        end
+      end
+
+      describe 'failure' do
+        it 'stores a datapoint' do
+          subject.configuration.storage.should_receive(:increment).with(event_configuration[:storage], 'event', :failure)
+          subject.failure('event')
+        end
       end
     end
 
-    describe 'failure' do
-      it 'stores a datapoint' do
-        subject.configuration.storage.should_receive(:increment).with(event_configuration[:storage], 'event', :failure)
-        subject.failure('event')
+    context 'when disabled' do
+      before do
+        subject.configuration.enabled = false
+      end
+
+      describe 'success' do
+        it 'does nothing' do
+          subject.configuration.storage.should_not_receive(:increment)
+          subject.success('event')
+        end
+      end
+
+      describe 'failure' do
+        it 'does nothing' do
+          subject.configuration.storage.should_not_receive(:increment)
+          subject.failure('event')
+        end
       end
     end
   end

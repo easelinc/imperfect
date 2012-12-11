@@ -12,6 +12,8 @@ class Imperfect
   # Example:
   #
   #  Imperfect.configure do |config|
+  #    config.enabled = Rails.env.production?
+  #
   #    config.enable_storage :cloudwatch, {
   #      :access_key_id => "your-aws-id",
   #      :secret_access_key => "your-aws-secret"
@@ -67,6 +69,8 @@ class Imperfect
   #
   # Returns nothing.
   def self.success(event)
+    return unless configuration.enabled
+
     event_configuration = configuration.events[event]
     return unless event_configuration
 
@@ -79,6 +83,8 @@ class Imperfect
   #
   # Returns nothing.
   def self.failure(event)
+    return unless configuration.enabled
+
     event_configuration = configuration.events[event]
     return unless event_configuration
 
@@ -90,14 +96,16 @@ class Imperfect
   #
   # Returns nothing.
   def self.trigger_alert!(event)
+    return unless configuration.enabled
   end
 
   class Configuration
-    attr_accessor :minimum_alert_update_interval, :events
+    attr_accessor :minimum_alert_update_interval, :events, :enabled
     attr_reader :storage, :alerts
 
     def initialize
       @minimum_alert_update_interval = 60
+      @enabled = true
       @events = {}
     end
 
