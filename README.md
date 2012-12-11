@@ -34,8 +34,8 @@ current configuration.
 ```
 Imperfect.configure do |config|
   config.enable_storage :cloudwatch, {
-    :aws_access_key_id => "your-aws-id",
-    :aws_secret_access_key => "your-aws-secret"
+    :access_key_id => "your-aws-id",
+    :secret_access_key => "your-aws-secret"
   }
   config.enable_alerts :pagerduty, {
     :api_key => "your-pagerduty-api-key"
