@@ -20,14 +20,13 @@ of failures.
 ## Setup
 
 1. `gem install imperfect`
-1. Add imperfect to your gemfile.
 1. Configure it.
 1. Call it using `Imperfect.success('event')` and `Imperfect.failure('event')`
    to approriately track the event you'd like to watch.
 
 If you'd like to trigger a failure for testing purposes you can call
 `Imperfect.trigger_alert!('event')` and it will send an alert using the
-current configuration.
+current configuration (NOTE: this is to be implemented).
 
 ## Configuration
 
@@ -88,5 +87,6 @@ end
 
 # Future Work
 
+1. Alerting (stub is there but needs implementation)
 1. Other data providers (graphite?)
 1. Other alert services
