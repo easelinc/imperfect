@@ -61,4 +61,39 @@ describe 'Imperfect' do
       end
     end
   end
+
+  context 'with storage' do
+    let(:event_configuration) {
+      {
+        :storage => {
+          :cloudwatch => {
+            :namespace => 'Imperfect',
+            :success_metric_name => 'event-success',
+            :failure_metric_name => 'event-failure'
+          }
+        }
+      }
+    }
+
+    before do
+      subject.configure do |config|
+        config.enable_storage(:cloudwatch, :access_key_id => 'id', :secret_key => 'secret')
+        config.events = { 'event' => event_configuration }
+      end
+    end
+
+    describe 'success' do
+      it 'stores a datapoint' do
+        subject.configuration.storage.should_receive(:increment).with(event_configuration[:storage], 'event', :success)
+        subject.success('event')
+      end
+    end
+
+    describe 'failure' do
+      it 'stores a datapoint' do
+        subject.configuration.storage.should_receive(:increment).with(event_configuration[:storage], 'event', :failure)
+        subject.failure('event')
+      end
+    end
+  end
 end

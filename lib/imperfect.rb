@@ -67,6 +67,10 @@ class Imperfect
   #
   # Returns nothing.
   def self.success(event)
+    event_configuration = configuration.events[event]
+    return unless event_configuration
+
+    configuration.storage.increment(event_configuration[:storage], event, :success)
   end
 
   # Public: Track a unsuccessful completion of the given event.
@@ -75,6 +79,10 @@ class Imperfect
   #
   # Returns nothing.
   def self.failure(event)
+    event_configuration = configuration.events[event]
+    return unless event_configuration
+
+    configuration.storage.increment(event_configuration[:storage], event, :failure)
   end
 
   # Test-only: This function is used to test whether an alerting
