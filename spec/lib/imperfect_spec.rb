@@ -56,11 +56,9 @@ describe 'Imperfect' do
                 }
               },
               :storage => {
-                :cloudwatch => {
-                  :namespace => 'Imperfect',
-                  :success_metric_name => 'event-success',
-                  :failure_metric_name => 'event-failure',
-                }
+                :cloudwatch_namespace => 'Imperfect',
+                :cloudwatch_success_metric_name => 'event-success',
+                :cloudwatch_failure_metric_name => 'event-failure',
               }
             }
           }
@@ -77,11 +75,9 @@ describe 'Imperfect' do
     let(:event_configuration) {
       {
         :storage => {
-          :cloudwatch => {
-            :namespace => 'Imperfect',
-            :success_metric_name => 'event-success',
-            :failure_metric_name => 'event-failure'
-          }
+          :cloudwatch_namespace => 'Imperfect',
+          :cloudwatch_success_metric_name => 'event-success',
+          :cloudwatch_failure_metric_name => 'event-failure'
         }
       }
     }

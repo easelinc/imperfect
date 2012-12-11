@@ -44,14 +44,12 @@ class Imperfect
   #        },
   #
   #        :storage => {
-  #          :cloudwatch => {
-  #            # The group which this metric should belong to on cloudwatch.
-  #            :namespace => 'Imperfect',
-  #            # The name of the cloudwatch metric to use for success.
-  #            :success_metric_name => 'event-success',
-  #            # The name of the cloudwatch metric to use for failure.
-  #            :failure_metric_name => 'event-failure',
-  #          }
+  #          # The group which this metric should belong to on cloudwatch.
+  #          :cloudwatch_namespace => 'Imperfect',
+  #          # The name of the cloudwatch metric to use for success.
+  #          :cloudwatch_success_metric_name => 'event-success',
+  #          # The name of the cloudwatch metric to use for failure.
+  #          :cloudwatch_failure_metric_name => 'event-failure',
   #        }
   #      }
   #    }

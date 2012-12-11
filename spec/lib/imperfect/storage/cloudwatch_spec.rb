@@ -10,13 +10,13 @@ describe 'Imperfect::Storage::Cloudwatch' do
       it 'submits the data to cloudwatch' do
         stub = stub_request(:post, 'https://monitoring.us-east-1.amazonaws.com/').
           with(:body => hash_including(
-            'Namespace' => 'Imperfect',
+            'Namespace' => 'namespace',
             'MetricData.member.1.MetricName' => 'event-success',
             'MetricData.member.1.Value' => '1.0'
             )
           )
 
-        subject.increment({}, 'event', :success)
+        subject.increment({ :cloudwatch_namespace => 'namespace' }, 'event', :success)
         stub.should have_been_requested
       end
     end
@@ -25,13 +25,13 @@ describe 'Imperfect::Storage::Cloudwatch' do
       it 'submits the data to cloudwatch' do
         stub = stub_request(:post, 'https://monitoring.us-east-1.amazonaws.com/').
           with(:body => hash_including(
-            'Namespace' => 'Imperfect',
+            'Namespace' => 'namespace',
             'MetricData.member.1.MetricName' => 'event-failure',
             'MetricData.member.1.Value' => '1.0'
             )
           )
 
-        subject.increment({}, 'event', :failure)
+        subject.increment({ :cloudwatch_namespace => 'namespace' }, 'event', :failure)
         stub.should have_been_requested
       end
     end

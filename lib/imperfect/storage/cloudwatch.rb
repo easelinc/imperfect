@@ -15,9 +15,9 @@ module Imperfect::Storage
     #
     # Returns nothing.
     def increment(configuration, event_name, status)
-      config_key = "#{status}_metric_name".to_sym
+      config_key = "cloudwatch_#{status}_metric_name".to_sym
       metric_name = configuration[config_key] || "#{event_name}-#{status}"
-      namespace = configuration[:namespace] || "Imperfect"
+      namespace = configuration[:cloudwatch_namespace] || "Imperfect"
 
       @client.put_metric_data(
         :namespace => namespace,
@@ -52,9 +52,9 @@ module Imperfect::Storage
     # status        - Either :success or :failure
     # period        - The number of seconds to look back.
     def count(configuration, event_name, status, period)
-      config_key = "#{status}_metric_name".to_sym
+      config_key = "cloudwatch_#{status}_metric_name".to_sym
       metric_name = configuration[config_key] || "#{event_name}-#{status}"
-      namespace = configuration[:namespace] || "Imperfect"
+      namespace = configuration[:cloudwatch_namespace] || "Imperfect"
       start_time = Time.now - period
       end_time = start_time + period
 
