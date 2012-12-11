@@ -77,9 +77,14 @@ Imperfect.configure do |config|
 end
 ```
 
-# Testing
+# Development
 
-1. Run `rake test`
+1. Checkout the repository
+1. Create a feature branch `git checkout -b my-new-feature`
+1. `bundle install`
+1. Run `guard`
+1. Submit a pull request (pulls should be mergable into master, include
+   tests for new functionality and be currently passing).
 
 # Future Work
 
