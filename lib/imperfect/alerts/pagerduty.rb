@@ -1,4 +1,4 @@
-require 'pagerduty'
+#require 'pagerduty'
 
 module Imperfect::Alerts
   class Pagerduty
