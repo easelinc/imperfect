@@ -16,7 +16,6 @@ Gem::Specification.new do |gem|
   gem.version       = Imperfect::VERSION
 
   gem.add_runtime_dependency "aws-sdk", "~> 1.8.0"
-  gem.add_runtime_dependency "pagerduty", "~> 1.3.3"
 
   gem.add_development_dependency "bundler", "~> 1.2.0"
   gem.add_development_dependency "rspec", "~> 2.12.0"
