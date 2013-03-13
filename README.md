@@ -66,10 +66,8 @@ Imperfect.configure do |config|
       :storage => {
         # The group which this metric should belong to on cloudwatch.
         :cloudwatch_namespace => 'Imperfect',
-        # The name of the cloudwatch metric to use for success.
-        :cloudwatch_success_metric_name => 'event-success',
-        # The name of the cloudwatch metric to use for failure.
-        :cloudwatch_failure_metric_name => 'event-failure',
+        # The name of the cloudwatch metric to use.
+        :cloudwatch_metric_name => 'event',
       }
     }
   }

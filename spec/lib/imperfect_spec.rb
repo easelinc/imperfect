@@ -57,8 +57,7 @@ describe 'Imperfect' do
               },
               :storage => {
                 :cloudwatch_namespace => 'Imperfect',
-                :cloudwatch_success_metric_name => 'event-success',
-                :cloudwatch_failure_metric_name => 'event-failure',
+                :cloudwatch_metric_name => 'event',
               }
             }
           }
@@ -76,8 +75,7 @@ describe 'Imperfect' do
       {
         :storage => {
           :cloudwatch_namespace => 'Imperfect',
-          :cloudwatch_success_metric_name => 'event-success',
-          :cloudwatch_failure_metric_name => 'event-failure'
+          :cloudwatch_metric_name => 'event',
         }
       }
     }
@@ -92,14 +90,14 @@ describe 'Imperfect' do
     context 'when enabled' do
       describe 'success' do
         it 'stores a datapoint' do
-          subject.configuration.storage.should_receive(:increment).with(event_configuration[:storage], 'event', :success)
+          subject.configuration.storage.should_receive(:update).with(event_configuration[:storage], 'event', :success)
           subject.success('event')
         end
       end
 
       describe 'failure' do
         it 'stores a datapoint' do
-          subject.configuration.storage.should_receive(:increment).with(event_configuration[:storage], 'event', :failure)
+          subject.configuration.storage.should_receive(:update).with(event_configuration[:storage], 'event', :failure)
           subject.failure('event')
         end
       end
@@ -112,14 +110,14 @@ describe 'Imperfect' do
 
       describe 'success' do
         it 'does nothing' do
-          subject.configuration.storage.should_not_receive(:increment)
+          subject.configuration.storage.should_not_receive(:update)
           subject.success('event')
         end
       end
 
       describe 'failure' do
         it 'does nothing' do
-          subject.configuration.storage.should_not_receive(:increment)
+          subject.configuration.storage.should_not_receive(:update)
           subject.failure('event')
         end
       end

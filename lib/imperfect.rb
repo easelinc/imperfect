@@ -46,10 +46,8 @@ class Imperfect
   #        :storage => {
   #          # The group which this metric should belong to on cloudwatch.
   #          :cloudwatch_namespace => 'Imperfect',
-  #          # The name of the cloudwatch metric to use for success.
-  #          :cloudwatch_success_metric_name => 'event-success',
-  #          # The name of the cloudwatch metric to use for failure.
-  #          :cloudwatch_failure_metric_name => 'event-failure',
+  #          # The name of the cloudwatch metric to use.
+  #          :cloudwatch_metric_name => 'event-success',
   #        }
   #      }
   #    }
@@ -72,7 +70,7 @@ class Imperfect
     event_configuration = configuration.events[event]
     return unless event_configuration
 
-    configuration.storage.increment(event_configuration[:storage], event, :success)
+    configuration.storage.update(event_configuration[:storage], event, :success)
   end
 
   # Public: Track a unsuccessful completion of the given event.
@@ -86,7 +84,7 @@ class Imperfect
     event_configuration = configuration.events[event]
     return unless event_configuration
 
-    configuration.storage.increment(event_configuration[:storage], event, :failure)
+    configuration.storage.update(event_configuration[:storage], event, :failure)
   end
 
   # Test-only: This function is used to test whether an alerting
