@@ -4,12 +4,12 @@ Bundler::GemHelper.install_tasks
 module Bundler
   class GemHelper
     # Override Bundler's concept of release.
-    def release_gem
+    def release_gem(path)
       with_fixed_editor {
         guard_on_master_branch
-        guard_already_tagged
-        build_gem
-        edit_changelog
+        # guard_already_tagged
+        # build_gem
+        # edit_changelog
         sh "git commit --allow-empty -a -m 'Release #{version_tag}'"
         tag_version {
           # Bundler's git_push pushes all branches. Let's restrict it
